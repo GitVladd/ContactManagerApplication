@@ -15,9 +15,9 @@ This is a simple ASP.NET MVC application that allows users to upload a CSV file 
 ---
 ### CSV file should contain following columns:
 
-Name [string]
-Date of birth [date]
-Married [bool]
-Phone [string]
-Salary [decimal] 
+- Name [string]
+- Date of birth [date]
+- Married [bool]
+- Phone [string]
+- Salary [decimal] 
 
