@@ -40,19 +40,20 @@
                 <td>@Html.DisplayFor(modelItem => item.Id)</td>
                 <form method="post" asp-action="Update" asp-route-id="@item.Id">
                 <td>
-                    <input type="text" name="contact.Name" value="@item.Name" />
+                    <input type="text" name="contact.Name" value="@item.Name" required />
                 </td>
                 <td>
-                    <input type="date" name="contact.DateOfBirth" value="@item.DateOfBirth?.ToString("yyyy-MM-dd")" />
+                    <input type="date" name="contact.DateOfBirth" value="@item.DateOfBirth?.ToString("yyyy-MM-dd")" required />
                 </td>
                 <td>
                     <input type="checkbox" name="contact.Married" value="true" @(item.Married ? "checked" : "") />
                 </td>
                 <td>
-                    <input type="text" name="contact.Phone" value="@item.Phone" />
+                    <input type="tel" name="contact.Phone" value="@item.Phone" pattern="^[+]?[0-9]{1,4}[-\s]?[0-9]{6,15}$" title="Enter valid phone number" required />
                 </td>
+
                 <td>
-                    <input type="number" name="contact.Salary" value="@item.Salary" />
+                    <input type="number" name="contact.Salary" value="@item.Salary" min="0.01" step="0.01" required />
                 </td>
                 <td>
                     <button type="submit" class="btn btn-primary">Update</button>
@@ -69,7 +70,6 @@
         }
     </tbody>
 </table>
-
 
 @* 
 <script type="text/javascript">

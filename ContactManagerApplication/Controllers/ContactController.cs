@@ -2,6 +2,7 @@
 using ContactManagerApplication.Processor;
 using ContactManagerApplication.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ContactManagerApplication.Controllers
 {
@@ -25,6 +26,15 @@ namespace ContactManagerApplication.Controllers
         [HttpPost]
         public async Task<ActionResult> Update(Guid id, ContactUpdateDto contact)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                throw new ArgumentException($"Model validation failed: {string.Join("; ", errors)}");
+            }
             await _contactService.UpdateAsync(id, contact);
             return RedirectToAction("Index");
         }
