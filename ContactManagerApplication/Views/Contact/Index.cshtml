@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Contact Page";
 }
-
 <h1>Contacts List</h1>
 
 <div class="card my-3">
@@ -22,7 +21,7 @@
     </div>
 </div>
 
-<table class="table">
+<table class="table" id="contactsTable">
     <thead>
         <tr>
             <th>@Html.DisplayNameFor(model => model.Id)</th>
@@ -71,14 +70,15 @@
     </tbody>
 </table>
 
-<!-- DataTables JS and Initialization -->
+
+@* 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.table').DataTable({
+        $('#contactsTable').DataTable({
             "paging": true,
             "searching": true,
             "ordering": true,
             "info": true
         });
     });
-</script>
+</script> *@
