@@ -11,3 +11,13 @@ This is a simple ASP.NET MVC application that allows users to upload a CSV file 
 - **Validation**: Basic data validation for file uploads and input fields.
 - **Database**: Data is stored securely in an MS SQL database.
 - **Error Handling**: Graceful error handling for common scenarios.
+
+---
+### CSV file should contain following columns:
+
+Name [string]
+Date of birth [date]
+Married [bool]
+Phone [string]
+Salary [decimal] 
+
