@@ -1,7 +1,9 @@
-﻿namespace ContactManagerApplication.Repository
+﻿using ContactManagerApplication.Models;
+
+namespace ContactManagerApplication.Repository
 {
     public interface IBaseRepository <TEntity, TKey> 
-        where TEntity : class
+        where TEntity : class, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
         Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
@@ -10,7 +12,7 @@
         void Add(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
 

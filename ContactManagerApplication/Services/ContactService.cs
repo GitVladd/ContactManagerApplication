@@ -1,37 +1,65 @@
 ﻿using ContactManagerApplication.DTOs;
+using ContactManagerApplication.Exceptions;
+using ContactManagerApplication.MapperProfiles;
+using ContactManagerApplication.Models;
+using ContactManagerApplication.Repository.Concrete;
 
 namespace ContactManagerApplication.Services
 {
-    public class ContactService : IContactService
+    public class ContactService(IContactRepository _contactRepository) : IContactService
     {
-        public Task<ContactGetDto> Add(ContactCreateDto entity)
+        public async Task<IEnumerable<ContactGetDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return (await _contactRepository.GetAllAsync(cancellationToken)).Select(c => c.ToContactGetDto());
         }
-
-        public Task<IEnumerable<ContactGetDto>> AddRange(IEnumerable<ContactCreateDto> entities)
+        public async Task<ContactGetDto> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return (await _contactRepository.GetByIdAsync(id))?.ToContactGetDto();
         }
-
-        public Task DeleteByIdAsync(Guid id)
+        public async Task<ContactGetDto> AddAsync(ContactCreateDto dto)
         {
-            throw new NotImplementedException();
+            Contact newEntity = dto.ToContact();
+
+            _contactRepository.Add(newEntity);
+            await _contactRepository.SaveChangesAsync();
+
+            return newEntity.ToContactGetDto();
         }
-
-        public Task<IEnumerable<ContactGetDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ContactGetDto>> AddRangeAsync(IEnumerable<ContactCreateDto> dtos)
         {
-            throw new NotImplementedException();
+            IEnumerable<Contact> newEntities = dtos.Select(e => e.ToContact());
+
+            _contactRepository.AddRange(newEntities);
+            await _contactRepository.SaveChangesAsync();
+
+            return newEntities.Select(e => e.ToContactGetDto());
         }
-
-        public Task<ContactGetDto> GetByIdAsync(Guid id)
+        public async Task<ContactGetDto> UpdateAsync(Guid id, ContactUpdateDto dto)
         {
-            throw new NotImplementedException();
+            var entity = await _contactRepository.GetByIdAsync(id);
+            if(entity == null)
+                throw new EntityNotFoundException($"Contact with ID '{id}' was not found.");
+
+            entity.Name = dto.Name;
+            entity.DateOfBirth = dto.DateOfBirth;
+            entity.Married = dto.Married;
+            entity.Phone = dto.Phone;
+            entity.Salary = dto.Salary;
+
+            _contactRepository.Update(entity);
+            await _contactRepository.SaveChangesAsync();
+
+            return entity.ToContactGetDto();
         }
-
-        public Task<ContactGetDto> UpdateAsync(Guid id, ContactUpdateDto entity)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var entity = await _contactRepository.GetByIdAsync(id);
+            if (entity == null)
+                throw new EntityNotFoundException($"Contact with ID '{id}' was not found.");
+
+            _contactRepository.Delete(entity);
+            await _contactRepository.SaveChangesAsync();
+            
         }
     }
 }

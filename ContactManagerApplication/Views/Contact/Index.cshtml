@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ContactManagerApplication.DTOs.ContactGetDto>
+
+@{
+    ViewData["Title"] = "Contact Page";
+}
+
+<h1>Contacts List</h1>
+
+<div class="card my-3">
+    <div class="card-header">
+        <h5>Upload CSV</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" asp-action="UploadCsv">
+            <div class="form-group">
+                <label for="file">Choose a CSV file</label>
+                <p></p>
+                <input type="file" id="file" name="file" accept=".csv" class="form-control-file" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Upload CSV</button>
+        </form>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+            <th>@Html.DisplayNameFor(model => model.Married)</th>
+            <th>@Html.DisplayNameFor(model => model.Phone)</th>
+            <th>@Html.DisplayNameFor(model => model.Salary)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <form method="post" asp-action="Update" asp-route-id="@item.Id">
+                <td>
+                    <input type="text" name="contact.Name" value="@item.Name" />
+                </td>
+                <td>
+                    <input type="date" name="contact.DateOfBirth" value="@item.DateOfBirth?.ToString("yyyy-MM-dd")" />
+                </td>
+                <td>
+                    <input type="checkbox" name="contact.Married" value="true" @(item.Married ? "checked" : "") />
+                </td>
+                <td>
+                    <input type="text" name="contact.Phone" value="@item.Phone" />
+                </td>
+                <td>
+                    <input type="number" name="contact.Salary" value="@item.Salary" />
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </td>
+                </form>
+                <td>
+                    @using (Html.BeginForm("Delete", "Contact", new { id = item.Id }, FormMethod.Post))
+                    {
+                        @Html.Hidden("_method", "DELETE")
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- DataTables JS and Initialization -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true
+        });
+    });
+</script>

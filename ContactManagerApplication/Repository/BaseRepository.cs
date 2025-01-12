@@ -1,11 +1,11 @@
-﻿
-using ContactManagerApplication.Data;
+﻿using ContactManagerApplication.Data;
+using ContactManagerApplication.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactManagerApplication.Repository
 {
     public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
-    where TEntity : class
+    where TEntity : class, IEntity<TKey>
     where TKey : IEquatable<TKey>
     {
         private readonly ContactDbContext _dbContext;
@@ -26,10 +26,7 @@ namespace ContactManagerApplication.Repository
         }
         public virtual void AddRange(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
-            {
-                _dbSet.Add(entity);
-            }
+            _dbSet.AddRange(entities);
         }
         public virtual void Add(TEntity entity)
         {
@@ -43,7 +40,7 @@ namespace ContactManagerApplication.Repository
         {
             _dbSet.Remove(entity);
         }
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }

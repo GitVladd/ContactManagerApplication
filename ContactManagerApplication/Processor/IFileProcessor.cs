@@ -1,9 +1,10 @@
-﻿using ContactManagerApplication.Models;
+﻿using ContactManagerApplication.DTOs;
 
 namespace ContactManagerApplication.Processor
 {
     public interface IFileProcessor
     {
-        IEnumerable<Contact> ReadFile(Stream fileStream);
+        void ValidateFile(IFormFile file);
+        IEnumerable<ContactCreateDto> ReadFile(IFormFile file);
     }
 }

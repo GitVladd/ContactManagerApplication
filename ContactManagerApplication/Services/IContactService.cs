@@ -1,5 +1,4 @@
 ﻿using ContactManagerApplication.DTOs;
-using ContactManagerApplication.Models;
 
 namespace ContactManagerApplication.Services
 {
@@ -7,8 +6,8 @@ namespace ContactManagerApplication.Services
     {
         Task<IEnumerable<ContactGetDto>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<ContactGetDto> GetByIdAsync(Guid id);
-        Task<IEnumerable<ContactGetDto>> AddRange(IEnumerable<ContactCreateDto> entities);
-        Task<ContactGetDto> Add(ContactCreateDto entity);
+        Task<IEnumerable<ContactGetDto>> AddRangeAsync(IEnumerable<ContactCreateDto> entities);
+        Task<ContactGetDto> AddAsync(ContactCreateDto entity);
         Task<ContactGetDto> UpdateAsync(Guid id, ContactUpdateDto entity);
         Task DeleteByIdAsync(Guid id);
     }

@@ -1,3 +1,5 @@
+using ContactManagerApplication.Extensions;
+
 namespace ContactManagerApplication
 {
     public class Program
@@ -8,6 +10,9 @@ namespace ContactManagerApplication
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDatabaseConfiguration(builder.Configuration);
+            builder.Services.AddApplicationServices();
 
             var app = builder.Build();
 
@@ -24,11 +29,9 @@ namespace ContactManagerApplication
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Contact}/{action=Index}/{id?}");
 
             app.Run();
         }
